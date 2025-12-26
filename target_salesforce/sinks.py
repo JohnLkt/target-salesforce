@@ -153,7 +153,7 @@ class SalesforceSink(BatchSink):
 
         sf_object_action = getattr(sf_object, action)
 
-        self.logger.info("SF Object type: " + str(type(sf_object)))
+        self.logger.debug("SF Object type: " + str(type(sf_object)))
         try:
             if action == "upsert":
                 external_id_field = self.config.get("external_id_field")

@@ -12,7 +12,7 @@ license = "Apache 2.0"
 [tool.poetry.dependencies]
 python = "<3.13,>=3.9"
 requests = "<2.33.0"
-singer-sdk = "<0.25.0"
+singer-sdk = "^0.53.0"
 simple-salesforce = "<1.13.0"
 
 [tool.poetry.dev-dependencies]

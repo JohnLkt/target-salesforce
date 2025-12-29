@@ -10,12 +10,7 @@ from simple_salesforce import SalesforceLogin
 LOGGER = logging.getLogger(__name__)
 
 OAuthCredentials = namedtuple(
-    "OAuthCredentials", ("consumer_key", "consumer_secret")
-)
-
-
-OAuthCredentialsOrig = namedtuple(
-    "OAuthCredentialsRaw", ("client_id", "client_secret", "refresh_token")
+    "OAuthCredentials", ("client_id", "client_secret", "refresh_token")
 )
 
 PasswordCredentials = namedtuple(
@@ -63,14 +58,6 @@ class SalesforceAuth(metaclass=abc.ABCMeta):
 
 
 class SalesforceAuthOAuth(SalesforceAuth):
-    def login(self):
-        session_id, instance = SalesforceLogin(
-            domain=self.domain, **self._credentials._asdict()
-        )
-        return Session(session_id, instance=instance)
-
-
-class SalesforceAuthOAuthOrig(SalesforceAuth):
     @property
     def _login_body(self):
         return {"grant_type": "refresh_token", **self._credentials._asdict()}

@@ -171,7 +171,7 @@ class SalesforceSink(BatchSink):
             )
             raise
 
-    return results
+        return results
 
     def _process_batch_by_action(
         self,

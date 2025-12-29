@@ -149,26 +149,29 @@ class SalesforceSink(BatchSink):
         action,
         batched_data,
     ):
-        """Handle upsert records different method"""
+        """Handle records using Bulk API v2, matching v1 behavior"""
 
         sf_object_action = getattr(sf_object, action)
 
-        self.logger.debug("SF Object type: " + str(type(sf_object)))
+        self.logger.debug("SF Object type: %s", type(sf_object))
+
         try:
             if action == "upsert":
-                external_id_field = self.config.get("external_id_field")
-                if not external_id_field:
-                    raise Exception("external_id_field config value must be set when upserting.")
-                results = sf_object_action(records=batched_data, external_id_field=external_id_field)
+                # Conform to v1: upsert strictly by Salesforce Id
+                results = sf_object_action(
+                    records=batched_data,
+                    external_id_field="Id",
+                )
             else:
                 results = sf_object_action(records=batched_data)
+
         except exceptions.SalesforceMalformedRequest as e:
             self.logger.error(
                 f"Data in {action} {self.stream_name} batch does not conform to target SF {self.stream_name} Object"
             )
-            raise (e)
+            raise
 
-        return results
+    return results
 
     def _process_batch_by_action(
         self,
